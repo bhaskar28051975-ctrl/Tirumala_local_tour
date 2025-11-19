@@ -434,8 +434,79 @@ function setLang(l) {
 
 function updateLangButtons() {
   document.querySelectorAll(".lang-pills button").forEach(btn => {
-    btn.setAttribu
-<!-- PART 4 of 4: FOOTER + END -->
+    btn.setAttribute("aria-pressed", btn.dataset.lang === currentLang);
+  });
+}
+
+
+/* ======================================================
+   DRIVER AUTO DETECTION (via ?driver=S1)
+   ====================================================== */
+function showDriverFromURL() {
+  const params = new URLSearchParams(window.location.search);
+
+  const driverId = params.get("driver");
+  const byPhone = params.get("phone");
+  const byTaxi  = params.get("taxi");
+
+  let driver = null;
+
+  if (driverId && DRIVERS[driverId]) driver = DRIVERS[driverId];
+  else if (byPhone) {
+    for (const k in DRIVERS) if (DRIVERS[k].phone === byPhone) driver = DRIVERS[k];
+  }
+  else if (byTaxi) {
+    let clean = byTaxi.replace(/\s+/g, "").toLowerCase();
+    for (const k in DRIVERS) {
+      if (DRIVERS[k].taxi.replace(/\s+/g, "").toLowerCase() === clean) driver = DRIVERS[k];
+    }
+  }
+
+  if (!driver) return;
+
+  // Create driver banner visually
+  const html = `
+    <section class="driver-banner" style="display:block;margin-top:0;padding:16px;background:rgba(0,0,0,0.55);">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <img src="${driver.photo}" style="width:88px;height:88px;border-radius:10px;border:3px solid white;object-fit:cover;">
+        <div>
+          <div style="font-size:20px;font-weight:700;">${driver.name}</div>
+          <div style="margin-top:4px;">📞 ${driver.phone}</div>
+          <div>🚕 Taxi: ${driver.taxi}</div>
+          <div style="margin-top:6px;font-weight:700;background:white;color:#083a61;padding:4px 8px;border-radius:6px;display:inline-block;">
+            ₹${driver.price} / Person
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/91${driver.phone}?text=${encodeURIComponent("Hello "+driver.name+", I want to book Tirumala One Day Tour.")}"
+         style="margin-top:10px;display:inline-block;background:#25D366;padding:10px 16px;color:#063;font-weight:700;border-radius:8px;text-decoration:none;">
+         Chat with ${driver.name} on WhatsApp
+      </a>
+    </section>
+  `;
+
+  // Inject after banner
+  document.querySelector(".hero").insertAdjacentHTML("afterend", html);
+
+  // Replace title + phone
+  document.getElementById("site_title").innerText = "Tirumala One Day Tour – Booked via " + driver.name;
+  document.getElementById("site_contact").innerText = "📞 " + driver.phone;
+}
+
+
+/* ======================================================
+   INITIAL LOAD
+   ====================================================== */
+document.addEventListener("DOMContentLoaded", function () {
+  setLang("en");
+  renderCards();
+  showDriverFromURL();
+});
+
+</script>
+
+<!-- END OF PART 3 -->
+  <!-- PART 4 of 4: FOOTER + END -->
 
 <footer style="text-align:center;padding:18px 8px;margin-top:28px;color:#555;font-size:14px;">
   © 2025 Tirumala One Day Tour – All Rights Reserved<br>
