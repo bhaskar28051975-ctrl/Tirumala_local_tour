@@ -1,0 +1,446 @@
+<!-- PART 1 of 4: HEAD + CSS + HERO/BANNER + LANGUAGE PILLS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tirumala One Day Tour – by Raju Naik</title>
+
+<style>
+  :root{
+    --accent:#0b8f6b;
+    --dark:#083a61;
+    --card-bg:#ffffff;
+    --muted:#666;
+    --pill-bg: rgba(255,255,255,0.12);
+    --pill-active-bg: #ffffff;
+    --pill-active-color: #083a61;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f3;color:#111; -webkit-font-smoothing:antialiased;}
+  a{color:inherit}
+
+  /* HERO / BANNER */
+  .hero{
+    position:relative;
+    background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThAlK2v-XnN6bvgiY4AGhg82oo0rIGT3BMWeCYIm-7jA&s=10') center/cover no-repeat;
+    padding: 44px 14px 78px;
+    color:#fff;
+    text-align:left;
+    overflow:hidden;
+  }
+  .hero::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.45)); pointer-events:none; }
+  .hero .inner{ position:relative; z-index:2; max-width:980px; margin:0 auto; display:flex; align-items:flex-start; gap:18px; padding-right:140px; }
+  .hero .text { flex:1; }
+  .hero h1{ margin:0; font-size:26px; font-weight:800; text-shadow:1px 1px 6px rgba(0,0,0,0.6) }
+  .hero h2{ margin:6px 0 0; font-size:16px; color:#ffeaa7; font-weight:600 }
+  .hero .signature{ margin-top:12px; background:rgba(0,0,0,0.35); display:inline-block; padding:8px 14px; border-radius:20px; font-weight:700 }
+
+  /* Language box (top-right inside banner) */
+  .lang-box{
+    position:absolute;
+    top:14px;
+    right:14px;
+    z-index:3;
+    text-align:right;
+    max-width:36%;
+    min-width:180px;
+  }
+  .lang-box .label{
+    font-size:13px;
+    color:rgba(255,255,255,0.95);
+    margin-bottom:8px;
+    font-weight:700;
+    text-transform:capitalize;
+    text-align:right;
+  }
+  .lang-pills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:flex-end;
+  }
+  .lang-pills button{
+    border:0;
+    background:var(--pill-bg);
+    color:#fff;
+    padding:8px 10px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:13px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.18);
+    transition: all 160ms ease;
+  }
+  .lang-pills button[aria-pressed="true"]{
+    background:var(--pill-active-bg);
+    color:var(--pill-active-color);
+    transform:translateY(-1px);
+  }
+
+  /* Make sure lang-box looks good on small screens */
+  @media(max-width:880px){
+    .hero .inner{ padding-right:20px; flex-direction:column; align-items:flex-start; gap:12px; }
+    .lang-box{ position:relative; right:auto; top:auto; margin-top:8px; max-width:100%; text-align:left; }
+    .lang-box .label{ text-align:left }
+    .lang-pills{ justify-content:flex-start }
+  }
+
+  /* small adjustments for very small screens */
+  @media(max-width:420px){
+    .lang-pills button{ padding:7px 9px; font-size:12px }
+    .hero h1{ font-size:20px }
+    .hero h2{ font-size:14px }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO / BANNER -->
+  <section class="hero" aria-label="Tirumala banner">
+    <div class="inner">
+      <div class="text">
+        <h1 id="site_title">Tirumala One Day Tour</h1>
+        <h2 id="site_by">by Raju Naik – Tirumala Taxi Driver</h2>
+        <div class="signature" id="site_contact">📞 +91 91540 95125</div>
+      </div>
+
+      <!-- (space reserved for driver-photo or small element if needed) -->
+      <div id="bannerRight" aria-hidden="true"></div>
+    </div>
+
+    <!-- LANGUAGE BOX (top-right inside banner) -->
+    <div class="lang-box" role="navigation" aria-label="Select language">
+      <div class="label">Select your language</div>
+      <div class="lang-pills" id="langPills">
+        <button data-lang="en" aria-pressed="true" onclick="setLang('en')">ENGLISH</button>
+        <button data-lang="te" aria-pressed="false" onclick="setLang('te')">తెలుగు</button>
+        <button data-lang="ta" aria-pressed="false" onclick="setLang('ta')">தமிழ்</button>
+        <button data-lang="kn" aria-pressed="false" onclick="setLang('kn')">ಕನ್ನಡ</button>
+        <button data-lang="mr" aria-pressed="false" onclick="setLang('mr')">मराठी</button>
+        <button data-lang="hi" aria-pressed="false" onclick="setLang('hi')">हिन्दी</button>
+      </div>
+    </div>
+  </section>
+
+<!-- END OF PART 1 -->
+<!-- When you're ready say "Send Part 2" and I'll provide the next block (cards, modal, inquiry). -->
+<!-- PART 2 of 4: MAIN CONTENT (CARDS + MODAL + INQUIRY) -->
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <h2 id="popular_heading" style="text-align:center;color:#083a61;margin-top:18px;">
+    Popular Tirumala Sightseeing Spots
+  </h2>
+
+  <!-- GRID FOR CARDS -->
+  <div class="grid" id="cardsGrid" aria-live="polite"></div>
+
+  <!-- QUICK INQUIRY -->
+  <div class="inquiry" id="inquiryBox" style="margin-top:22px;">
+    <h3 id="inq_title">Quick Inquiry / Booking</h3>
+
+    <input id="inq_name" type="text" placeholder="Your name" />
+    <input id="inq_phone" type="tel" placeholder="Phone number" />
+    <textarea id="inq_msg" rows="3"
+      placeholder="Your message (date, number of people, pickup point)"></textarea>
+
+    <a id="inq_submit" class="btn" href="#" onclick="sendInquiry();return false;"
+      style="display:inline-block;margin-top:10px;">
+      Send via WhatsApp
+    </a>
+  </div>
+
+</div> <!-- end container -->
+
+
+<!-- MODAL OVERLAY (DETAIL POPUP) -->
+<div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+  <div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+    <img id="modalImage" src="" alt="Place image">
+    <div class="cont">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+
+      <a id="modalWA" class="btn" href="#" target="_blank" rel="noopener">Book on WhatsApp</a>
+      <a class="close" href="#" onclick="closeModal();return false;">Close</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- FLOATING WHATSAPP ICON -->
+<div class="wa-float" aria-hidden="false">
+  <a id="floatWA" href="https://wa.me/919154095125" target="_blank"
+     title="Chat on WhatsApp">💬</a>
+</div>
+
+<!-- END OF PART 2 -->
+<!-- When ready, say: "Send Part 3" -->
+<!-- PART 3 of 4: FULL JAVASCRIPT SECTION -->
+
+<script>
+/* ======================================================
+   DRIVER DATABASE (S1 = Srinu, S2 = Kumar)
+   ====================================================== */
+const DRIVERS = {
+  "S1": {
+    id: "S1",
+    name: "Srinu",
+    phone: "9848056765",
+    taxi: "AP 03 U 7788",
+    price: "150",
+    photo: "https://raw.githubusercontent.com/bhaskar28051975-ctrl/Tirumala_one_day_tour/main/images/s1.jpg"
+  },
+  "S2": {
+    id: "S2",
+    name: "Kumar",
+    phone: "9000012345",
+    taxi: "AP 39 H 6550",
+    price: "150",
+    photo: "https://raw.githubusercontent.com/bhaskar28051975-ctrl/Tirumala_one_day_tour/main/images/s2.jpg"
+  }
+};
+
+
+/* ======================================================
+   SPOT IMAGES (6 TOTAL)
+   ====================================================== */
+const images = [
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjQKCOUX8qe4JhGLolCec5uaHPWOf_JMS1N89RE7c7U1K-mnyN0hyMvAI&s",
+  "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyDCOzxi4EmSOa4TULBuuPqN4LFEChwrZUWbSChkC109oelmQ4Kj1x0x5cinp0Gy51ybFJExcrFOiUgy-hr4dNCX-DmzqNf4tGA-tZfb2WbFAa451SDY-3eBGPGoek3q8d176tf6g=s1328-w720-h1328-rw",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgNhA5eywPCrjipY8W9CmmiDQ0YD0jO_ENZUYmlQuB6_UK9hBTKP_m56M&s",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZHhZ_7A_o3ry0OkEvjgAiL8rtBFAjnsJLMrmJqQjWRhcXU4YQjN8wSvI&s",
+  "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxJ7O8YmvoZYAGezAUYNgzxnb1JEs3gy-8NNPCQHhpwOEV5GIAGWsqnKcZYRD-2wboeIY86LrZI7vaiFdDFt743ej0zV9RuGbgAAVqM9YVJ6IWz2_sGjwqMVz6m-L0I5_tOm43UkA=s520-w520-h416-n-k-no",
+  "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSz9sTA8deK5pRXqucjul2ncN4ZzM1kwMt3zMShcWCn0p3udbtIb1RchazsydgeVdy_HrTfLn-xgzXpYld-GcZyr9akevUiyIJgHwN19HJ3ZfNMMAWN5FWcJtHdHjs0SbOMhm0M=s520-w520-h416-n-k-no"
+];
+
+
+/* ======================================================
+   6-LANGUAGE TEXT DATABASE
+   ====================================================== */
+const langData = {
+  en: {
+    siteTitle: "Tirumala One Day Tour",
+    siteBy: "by Raju Naik – Tirumala Taxi Driver",
+    contact: "📞 +91 91540 95125",
+    popular: "Popular Tirumala Sightseeing Spots",
+    inqTitle: "Quick Inquiry / Booking",
+    inqName: "Your name",
+    inqPhone: "Phone number",
+    inqMsg: "Message (date, people, pickup)",
+    inqBtn: "Send via WhatsApp",
+    spots: [
+      { title: "Papavinasanam", desc: "A sacred waterfall believed to wash away sins." },
+      { title: "Akasha Ganga", desc: "Holy water used for temple rituals." },
+      { title: "Srivari Padalu", desc: "Footprints of Lord Venkateswara at Narayanagiri." },
+      { title: "Venu Gopala Swamy Temple", desc: "Ancient Krishna temple near Papavinasanam." },
+      { title: "Sila Thoranam", desc: "Natural rock arch — rare geological structure." },
+      { title: "Japali Theertham", desc: "Forest temple dedicated to Hanuman." }
+    ]
+  },
+
+  te: {
+    siteTitle: "తిరుమల ఒకరోజు దర్శన యాత్ర",
+    siteBy: "రాజు నాయక్ – తిరుమల టాక్సీ డ్రైవర్",
+    contact: "📞 +91 91540 95125",
+    popular: "తిరుమల ప్రసిద్ధ దర్శనీయ స్థలాలు",
+    inqTitle: "త్వరిత విచారణ / బుకింగ్",
+    inqName: "మీ పేరు",
+    inqPhone: "ఫోన్ నంబరు",
+    inqMsg: "సందేశం (తేదీ, మంది, పికప్)",
+    inqBtn: "వాట్సాప్ ద్వారా పంపండి",
+    spots: [
+      { title: "పాపవినాశనం", desc: "పాపాలను శుభ్రం చేసే పవిత్ర జలపాతం." },
+      { title: "ఆకాశ గంగా", desc: "దేవాలయ పూజల కోసం ఉపయోగించే పవిత్ర నీరు." },
+      { title: "శ్రీవారి పడలు", desc: "శ్రీవారి పవిత్ర పాదాలు ఉన్న ప్రదేశం." },
+      { title: "వేణుగోపాల స్వామి ఆలయం", desc: "పాపవినాశనం సమీపంలోని ప్రాచీన దేవాలయం." },
+      { title: "శిలా తోరణం", desc: "అరుదైన సహజ రాతి తలుపు ఆకృతి." },
+      { title: "జపాలి తీర్థం", desc: "హనుమాన్ స్వామి వారికి అంకితమైన దేవాలయం." }
+    ]
+  },
+
+  ta: {
+    siteTitle: "திருமலை ஒருநாள் சுற்றுலா",
+    siteBy: "ராஜு நாயக் – திருமலை டாக்ஸி டிரைவர்",
+    contact: "📞 +91 91540 95125",
+    popular: "திருமலை முக்கிய சுற்றுலா இடங்கள்",
+    inqTitle: "அவசர விசாரணை / முன்பதிவு",
+    inqName: "உங்கள் பெயர்",
+    inqPhone: "தொலைபேசி எண்",
+    inqMsg: "செய்தி (தேதி, பேர், பிக்கப்)",
+    inqBtn: "WhatsApp மூலம் அனுப்பு",
+    spots: [
+      { title: "பாபவினாசனம்", desc: "பாவங்களை நீக்கும் புனித அருவி." },
+      { title: "ஆகாச கங்கா", desc: "தினசரி பூஜைக்கு பயன்படும் புனிதநீர்." },
+      { title: "ஸ்ரீவரி படல்", desc: "நாராயணகிரியில் அமைந்த காலடிச் சின்னங்கள்." },
+      { title: "வேணு கோபால ஸ்வாமி கோவில்", desc: "பழமையான கிருஷ்ணர் கோவில்." },
+      { title: "சிலா தோரணம்", desc: "இயற்கை பாறை வளைவு." },
+      { title: "ஜபாலி தீர்த்தம்", desc: "அமைதியான காடு கோவில்ரும்." }
+    ]
+  },
+
+  kn: {
+    siteTitle: "ತಿರುಮಲ ಒಂದು ದಿನದ ಪ್ರವಾಸ",
+    siteBy: "ರಾಜು ನಾಯಕ್ – ತಿರುಮಲ ಟ್ಯಾಕ್ಸಿ ಡ್ರೈವರ್",
+    contact: "📞 +91 91540 95125",
+    popular: "ತಿರುಮಲ ಪ್ರಸಿದ್ಧ ದರ್ಶನೀಯ ಸ್ಥಳಗಳು",
+    inqTitle: "ವೇಗದ ವಿಚಾರಣೆ / ಬುಕ್ಕಿಂಗ್",
+    inqName: "ನಿಮ್ಮ ಹೆಸರು",
+    inqPhone: "ಫೋನ್ ಸಂಖ್ಯೆ",
+    inqMsg: "ಸಂದೇಶ (ದಿನಾಂಕ, ಜನರು, ಪಿಕಪ್)",
+    inqBtn: "WhatsApp ಮೂಲಕ ಕಳುಹಿಸಿ",
+    spots: [
+      { title: "ಪಾಪವಿನಾಶನಂ", desc: "ಪಾಪಗಳನ್ನು ಶುದ್ಧಗೊಳಿಸುವ ಪವಿತ್ರ ಜಲಪಾತ." },
+      { title: "ಆಕಾಶ ಗಂಗಾ", desc: "ದೇವಾಲಯದಲ್ಲಿ ಬಳಕೆಯಾಗುವ ಪವಿತ್ರ ನೀರು." },
+      { title: "ಶ್ರೀವರಿ ಪದಗಳು", desc: "ಪವಿತ್ರ ಪಾದಚಿಹ್ನೆಗಳ ಸ್ಥಳ." },
+      { title: "ವೇಣುಗೋಪಾಲ ಸ್ವಾಮಿ ದೇವಸ್ಥಾನ", desc: "ಪ್ರಾಚೀನ ಕೃಷ್ಣ ದೇವಾಲಯ." },
+      { title: "ಶಿಲಾ ತೋರಣಂ", desc: "ನೈಸರ್ಗಿಕ ಶಿಲಾ ಬಾಗಿಲು." },
+      { title: "ಜಪಾಲಿ ತೀರ್ಥಂ", desc: "ಹನುಮಂತನಿಗೆ ಸಮರ್ಪಿತವಾದ ಸ್ಥಳ." }
+    ]
+  },
+
+  mr: {
+    siteTitle: "तिरुमला एकदिवसीय यात्रा",
+    siteBy: "राजू नायक – तिरुमला टैक्सी ड्रायव्हर",
+    contact: "📞 +91 91540 95125",
+    popular: "तिरुमला प्रमुख पर्यटनस्थळे",
+    inqTitle: "त्वरित चौकशी / बुकिंग",
+    inqName: "तुमचे नाव",
+    inqPhone: "फोन नंबर",
+    inqMsg: "संदेश (तारीख, लोक, पिकअप)",
+    inqBtn: "WhatsApp द्वारे पाठवा",
+    spots: [
+      { title: "पापविनाशनम", desc: "पाप धुणारा पवित्र धबधबा." },
+      { title: "आकाश गंगा", desc: "पूजेसाठी वापरण्यात येणारे पवित्र पाणी." },
+      { title: "श्रीवारी पादु", desc: "श्रीवारीचे पवित्र पाय." },
+      { title: "श्री वेणुगोपाल स्वामी मंदिर", desc: "जुने कृष्ण मंदिर." },
+      { title: "शिला तोरणम", desc: "नैसर्गिक खडकाचे कमान." },
+      { title: "जपली तीर्थ", desc: "हनुमान भक्तांचे ठिकाण." }
+    ]
+  },
+
+  hi: {
+    siteTitle: "तिरुमला एकदिवसीय यात्रा",
+    siteBy: "राजू नायक – तिरुमला टैक्सी ड्राइवर",
+    contact: "📞 +91 91540 95125",
+    popular: "तिरुमला प्रमुख दर्शनीय स्थल",
+    inqTitle: "त्वरित पूछताछ / बुकिंग",
+    inqName: "आपका नाम",
+    inqPhone: "फोन नंबर",
+    inqMsg: "संदेश (तारीख, लोग, पिकअप)",
+    inqBtn: "WhatsApp पर भेजें",
+    spots: [
+      { title: "पापविनाशनम", desc: "पवित्र झरना जो पाप धोता है।" },
+      { title: "आकाश गंगा", desc: "दैनिक पूजा में उपयोग होने वाला पवित्र जल." },
+      { title: "श्रीवारी पादु", desc: "श्रीवारी के पवित्र पदचिह्न。" },
+      { title: "श्री वेणुगोपाल स्वामी मंदिर", desc: "कृष्ण मंदिर。" },
+      { title: "शिला तोरणम", desc: "प्राकृतिक चट्टान का मेहराब。" },
+      { title: "जपली तीर्थ", desc: "हनुमान जी का पवित्र स्थल。" }
+    ]
+  }
+};
+
+
+/* ======================================================
+   RENDER CARDS
+   ====================================================== */
+function renderCards() {
+  const grid = document.getElementById("cardsGrid");
+  grid.innerHTML = "";
+
+  const L = langData[currentLang];
+
+  for (let i = 0; i < L.spots.length; i++) {
+    grid.innerHTML += `
+    <div class="card">
+      <img src="${images[i]}" alt="${L.spots[i].title}">
+      <div class="body">
+        <h3>${L.spots[i].title}</h3>
+        <p>${L.spots[i].desc}</p>
+        <div class="actions">
+          <a class="btn" href="#" onclick="openModal(${i});return false;">Details</a>
+        </div>
+      </div>
+    </div>
+    `;
+  }
+}
+
+
+/* ======================================================
+   OPEN MODAL
+   ====================================================== */
+function openModal(i) {
+  const spot = langData[currentLang].spots[i];
+  document.getElementById("modalImage").src = images[i];
+  document.getElementById("modalTitle").innerText = spot.title;
+  document.getElementById("modalDesc").innerText = spot.desc;
+
+  const waText = encodeURIComponent(`Hi, I want details about ${spot.title}`);
+  document.getElementById("modalWA").href = 
+    "https://wa.me/919154095125?text=" + waText;
+
+  document.getElementById("modalOverlay").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+
+/* ======================================================
+   SEND INQUIRY VIA WHATSAPP
+   ====================================================== */
+function sendInquiry() {
+  const name = document.getElementById("inq_name").value.trim();
+  const phone = document.getElementById("inq_phone").value.trim();
+  const msg = document.getElementById("inq_msg").value.trim();
+
+  if (!name || !phone) {
+    alert("Please enter name and phone.");
+    return;
+  }
+
+  const text = encodeURIComponent(`Inquiry from ${name} (${phone}): ${msg}`);
+  window.open("https://wa.me/919154095125?text=" + text, "_blank");
+}
+
+
+/* ======================================================
+   LANGUAGE SWITCHING
+   ====================================================== */
+let currentLang = "en";
+
+function setLang(l) {
+  currentLang = l;
+  const L = langData[l];
+
+  document.getElementById("site_title").innerText = L.siteTitle;
+  document.getElementById("site_by").innerText = L.siteBy;
+  document.getElementById("site_contact").innerText = L.contact;
+  document.getElementById("popular_heading").innerText = L.popular;
+  document.getElementById("inq_title").innerText = L.inqTitle;
+  document.getElementById("inq_name").placeholder = L.inqName;
+  document.getElementById("inq_phone").placeholder = L.inqPhone;
+  document.getElementById("inq_msg").placeholder = L.inqMsg;
+  document.getElementById("inq_submit").innerText = L.inqBtn;
+
+  updateLangButtons();
+  renderCards();
+}
+
+function updateLangButtons() {
+  document.querySelectorAll(".lang-pills button").forEach(btn => {
+    btn.setAttribu
+<!-- PART 4 of 4: FOOTER + END -->
+
+<footer style="text-align:center;padding:18px 8px;margin-top:28px;color:#555;font-size:14px;">
+  © 2025 Tirumala One Day Tour – All Rights Reserved<br>
+  Designed for <b>BR Journey Travels</b> | Powered by <b>Raju Naik</b>
+</footer>
+
+</body>
+</html>
